@@ -13,6 +13,8 @@
 		A2BA889C2199533D00A25068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2BA889B2199533D00A25068 /* Assets.xcassets */; };
 		A2BA889F2199533D00A25068 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2BA889D2199533D00A25068 /* LaunchScreen.storyboard */; };
 		A2BA88A22199533D00A25068 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88A12199533D00A25068 /* main.m */; };
+		A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */; };
+		A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,11 @@
 		A2BA889E2199533D00A25068 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A2BA88A02199533D00A25068 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2BA88A12199533D00A25068 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A2BA88A8219956FE00A25068 /* CommonMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonMacro.h; sourceTree = "<group>"; };
+		A2BA88A921995E6D00A25068 /* TYCodingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCodingViewController.h; sourceTree = "<group>"; };
+		A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCodingViewController.m; sourceTree = "<group>"; };
+		A2BA88AC21996FB300A25068 /* TYEncodeVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYEncodeVideo.h; sourceTree = "<group>"; };
+		A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYEncodeVideo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,9 +69,14 @@
 				A2BA88902199533D00A25068 /* AppDelegate.m */,
 				A2BA88922199533D00A25068 /* ViewController.h */,
 				A2BA88932199533D00A25068 /* ViewController.m */,
+				A2BA88A921995E6D00A25068 /* TYCodingViewController.h */,
+				A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */,
+				A2BA88AC21996FB300A25068 /* TYEncodeVideo.h */,
+				A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */,
 				A2BA889B2199533D00A25068 /* Assets.xcassets */,
 				A2BA889D2199533D00A25068 /* LaunchScreen.storyboard */,
 				A2BA88A02199533D00A25068 /* Info.plist */,
+				A2BA88A8219956FE00A25068 /* CommonMacro.h */,
 				A2BA88A12199533D00A25068 /* main.m */,
 				A2BA88982199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld */,
 			);
@@ -143,6 +155,8 @@
 			files = (
 				A2BA88942199533D00A25068 /* ViewController.m in Sources */,
 				A2BA889A2199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld in Sources */,
+				A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */,
+				A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */,
 				A2BA88A22199533D00A25068 /* main.m in Sources */,
 				A2BA88912199533D00A25068 /* AppDelegate.m in Sources */,
 			);
@@ -272,7 +286,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N5WRHCE748;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TYVideoToolbox_demo/CommonMacro.h";
 				INFOPLIST_FILE = TYVideoToolbox_demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Users-xiyin-desktop-name-Get-image-processing.TYVideoToolbox-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -286,7 +302,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N5WRHCE748;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TYVideoToolbox_demo/CommonMacro.h";
 				INFOPLIST_FILE = TYVideoToolbox_demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Users-xiyin-desktop-name-Get-image-processing.TYVideoToolbox-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
