@@ -8,6 +8,9 @@
 
 #import "ViewController.h"
 #import "TYCodingViewController.h"
+#import "TYDecodingViewController.h"
+#import "TYStyleCodecViewController.h"
+
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSMutableArray *muArray;
 @end
@@ -58,6 +61,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 0) {
         TYCodingViewController *vc = [[TYCodingViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if(indexPath.row == 1){
+        TYDecodingViewController *vc = [[TYDecodingViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        TYStyleCodecViewController *vc = [[TYStyleCodecViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

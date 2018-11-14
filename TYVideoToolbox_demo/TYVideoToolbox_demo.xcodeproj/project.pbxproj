@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CA219BF6C2007DF39E /* TYPlayLayer.m */; };
+		A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CD219BFBC5007DF39E /* TYToGetData.m */; };
+		A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */; };
+		A2B91E35219AD5260047A60C /* TYDecodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2B91E34219AD5260047A60C /* TYDecodingViewController.m */; };
 		A2BA88912199533D00A25068 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88902199533D00A25068 /* AppDelegate.m */; };
 		A2BA88942199533D00A25068 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88932199533D00A25068 /* ViewController.m */; };
 		A2BA889A2199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88982199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld */; };
@@ -18,6 +22,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A25948C9219BF6C2007DF39E /* TYPlayLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYPlayLayer.h; sourceTree = "<group>"; };
+		A25948CA219BF6C2007DF39E /* TYPlayLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYPlayLayer.m; sourceTree = "<group>"; };
+		A25948CC219BFBC5007DF39E /* TYToGetData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYToGetData.h; sourceTree = "<group>"; };
+		A25948CD219BFBC5007DF39E /* TYToGetData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYToGetData.m; sourceTree = "<group>"; };
+		A25948CF219C0F40007DF39E /* TYStyleCodecViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYStyleCodecViewController.h; sourceTree = "<group>"; };
+		A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYStyleCodecViewController.m; sourceTree = "<group>"; };
+		A2B91E33219AD5260047A60C /* TYDecodingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYDecodingViewController.h; sourceTree = "<group>"; };
+		A2B91E34219AD5260047A60C /* TYDecodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYDecodingViewController.m; sourceTree = "<group>"; };
 		A2BA888C2199533D00A25068 /* TYVideoToolbox_demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYVideoToolbox_demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2BA888F2199533D00A25068 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A2BA88902199533D00A25068 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -73,6 +85,14 @@
 				A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */,
 				A2BA88AC21996FB300A25068 /* TYEncodeVideo.h */,
 				A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */,
+				A2B91E33219AD5260047A60C /* TYDecodingViewController.h */,
+				A2B91E34219AD5260047A60C /* TYDecodingViewController.m */,
+				A25948C9219BF6C2007DF39E /* TYPlayLayer.h */,
+				A25948CA219BF6C2007DF39E /* TYPlayLayer.m */,
+				A25948CC219BFBC5007DF39E /* TYToGetData.h */,
+				A25948CD219BFBC5007DF39E /* TYToGetData.m */,
+				A25948CF219C0F40007DF39E /* TYStyleCodecViewController.h */,
+				A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */,
 				A2BA889B2199533D00A25068 /* Assets.xcassets */,
 				A2BA889D2199533D00A25068 /* LaunchScreen.storyboard */,
 				A2BA88A02199533D00A25068 /* Info.plist */,
@@ -153,10 +173,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */,
+				A2B91E35219AD5260047A60C /* TYDecodingViewController.m in Sources */,
+				A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */,
 				A2BA88942199533D00A25068 /* ViewController.m in Sources */,
 				A2BA889A2199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld in Sources */,
 				A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */,
 				A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */,
+				A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */,
 				A2BA88A22199533D00A25068 /* main.m in Sources */,
 				A2BA88912199533D00A25068 /* AppDelegate.m in Sources */,
 			);

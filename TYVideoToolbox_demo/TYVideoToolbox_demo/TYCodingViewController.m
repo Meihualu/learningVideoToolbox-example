@@ -36,6 +36,7 @@
     [fileManager removeItemAtPath:h264FileSavePath error:nil];
     [fileManager createFileAtPath:h264FileSavePath contents:nil attributes:nil];
     [self startCamera];
+    [self cancelBut];
 }
 
 //获取摄像头
@@ -101,6 +102,7 @@
 }
 
 - (void)selectorBut{
+    [self stopCamera];
     [h264Encoder end];
 }
 
@@ -169,29 +171,19 @@
         const char bytes[] = "\x00\x00\x00\x01";
         size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
         NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
-        
-        
-        /*NSData *UnitHeader;
-         if(isKeyFrame)
-         {
-         char header[2];
-         header[0] = '\x65';
-         UnitHeader = [NSData dataWithBytes:header length:1];
-         framecount = 1;
-         }
-         else
-         {
-         char header[4];
-         header[0] = '\x41';
-         //header[1] = '\x9A';
-         //header[2] = framecount;
-         UnitHeader = [NSData dataWithBytes:header length:1];
-         framecount++;
-         }*/
         [fileHandle writeData:ByteHeader];
         //[fileHandle writeData:UnitHeader];
         [fileHandle writeData:data];
     }
+}
+//取消摄像头
+- (void)stopCamera
+{
+    [captureSession stopRunning];
+    //close(fd);
+    [fileHandle closeFile];
+    fileHandle = NULL;
+    [sbDisplayLayer removeFromSuperlayer];
 }
 
 - (void)didReceiveMemoryWarning {
