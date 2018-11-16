@@ -52,6 +52,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 {
     if(_bufferSize < _bufferCap && self.fileStream.hasBytesAvailable) {
         NSInteger readBytes = [self.fileStream read:_buffer + _bufferSize maxLength:_bufferCap - _bufferSize];
+        NSLog(@"这一段的数据:%ld _buffer:%s _bufferSize:%ld _bufferCap:%ld",(long)readBytes,_buffer,(long)_bufferSize ,(long)_bufferCap);
         _bufferSize += readBytes;
     }
     

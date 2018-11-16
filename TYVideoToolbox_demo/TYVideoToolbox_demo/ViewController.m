@@ -10,6 +10,7 @@
 #import "TYCodingViewController.h"
 #import "TYDecodingViewController.h"
 #import "TYStyleCodecViewController.h"
+#import "TYAudioCodingViewController.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSMutableArray *muArray;
@@ -37,6 +38,9 @@
     [_muArray addObject:@"编码"];
     [_muArray addObject:@"解码"];
     [_muArray addObject:@"编解吗"];
+    [_muArray addObject:@"音频编码"];
+    [_muArray addObject:@"音频解吗"];
+    [_muArray addObject:@"音频编解吗"];
     return _muArray;
 }
 
@@ -45,7 +49,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -65,8 +69,11 @@
     }else if(indexPath.row == 1){
         TYDecodingViewController *vc = [[TYDecodingViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else{
+    }else if(indexPath.row == 2){
         TYStyleCodecViewController *vc = [[TYStyleCodecViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if(indexPath.row == 3){
+        TYAudioCodingViewController *vc = [[TYAudioCodingViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

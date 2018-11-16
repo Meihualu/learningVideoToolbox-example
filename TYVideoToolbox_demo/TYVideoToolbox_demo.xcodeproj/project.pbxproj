@@ -10,6 +10,8 @@
 		A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CA219BF6C2007DF39E /* TYPlayLayer.m */; };
 		A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CD219BFBC5007DF39E /* TYToGetData.m */; };
 		A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */; };
+		A27A5D4C219E9B9D00009991 /* TYAudioCodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */; };
+		A27A5D4F219EA74300009991 /* TYAudioCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A27A5D4E219EA74300009991 /* TYAudioCoding.m */; };
 		A2B91E35219AD5260047A60C /* TYDecodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2B91E34219AD5260047A60C /* TYDecodingViewController.m */; };
 		A2BA88912199533D00A25068 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88902199533D00A25068 /* AppDelegate.m */; };
 		A2BA88942199533D00A25068 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88932199533D00A25068 /* ViewController.m */; };
@@ -28,6 +30,10 @@
 		A25948CD219BFBC5007DF39E /* TYToGetData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYToGetData.m; sourceTree = "<group>"; };
 		A25948CF219C0F40007DF39E /* TYStyleCodecViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYStyleCodecViewController.h; sourceTree = "<group>"; };
 		A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYStyleCodecViewController.m; sourceTree = "<group>"; };
+		A27A5D4A219E9B9D00009991 /* TYAudioCodingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYAudioCodingViewController.h; sourceTree = "<group>"; };
+		A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioCodingViewController.m; sourceTree = "<group>"; };
+		A27A5D4D219EA74300009991 /* TYAudioCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYAudioCoding.h; sourceTree = "<group>"; };
+		A27A5D4E219EA74300009991 /* TYAudioCoding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioCoding.m; sourceTree = "<group>"; };
 		A2B91E33219AD5260047A60C /* TYDecodingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYDecodingViewController.h; sourceTree = "<group>"; };
 		A2B91E34219AD5260047A60C /* TYDecodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYDecodingViewController.m; sourceTree = "<group>"; };
 		A2BA888C2199533D00A25068 /* TYVideoToolbox_demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYVideoToolbox_demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +99,10 @@
 				A25948CD219BFBC5007DF39E /* TYToGetData.m */,
 				A25948CF219C0F40007DF39E /* TYStyleCodecViewController.h */,
 				A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */,
+				A27A5D4A219E9B9D00009991 /* TYAudioCodingViewController.h */,
+				A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */,
+				A27A5D4D219EA74300009991 /* TYAudioCoding.h */,
+				A27A5D4E219EA74300009991 /* TYAudioCoding.m */,
 				A2BA889B2199533D00A25068 /* Assets.xcassets */,
 				A2BA889D2199533D00A25068 /* LaunchScreen.storyboard */,
 				A2BA88A02199533D00A25068 /* Info.plist */,
@@ -174,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */,
+				A27A5D4F219EA74300009991 /* TYAudioCoding.m in Sources */,
 				A2B91E35219AD5260047A60C /* TYDecodingViewController.m in Sources */,
 				A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */,
 				A2BA88942199533D00A25068 /* ViewController.m in Sources */,
@@ -181,6 +192,7 @@
 				A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */,
 				A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */,
 				A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */,
+				A27A5D4C219E9B9D00009991 /* TYAudioCodingViewController.m in Sources */,
 				A2BA88A22199533D00A25068 /* main.m in Sources */,
 				A2BA88912199533D00A25068 /* AppDelegate.m in Sources */,
 			);

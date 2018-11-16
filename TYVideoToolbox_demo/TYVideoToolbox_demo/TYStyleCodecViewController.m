@@ -256,6 +256,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
             case 0x05:
                 NSLog(@"Nal type is IDR frame");
                 if([self initH264Decoder]) {
+                    NSLog(@"每次都能进入这里吗");
                     pixelBuffer = [self decode:vp];
                 }
                 break;
@@ -293,14 +294,17 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
 }
 
 #pragma mark - 解码
+//这里都是为了做准备，这里只会创建一次
 -(BOOL)initH264Decoder {
     if(_deocderSession) {
+        NSLog(@"已有了工具");
         return YES;
     }
     //初始sps和pps
     const uint8_t* const parameterSetPointers[2] = { _sps, _pps };
     //用来放置sps和pps的具体数据
     const size_t parameterSetSizes[2] = { _spsSize, _ppsSize };
+    //准备
     OSStatus status = CMVideoFormatDescriptionCreateFromH264ParameterSets(kCFAllocatorDefault,
                                                                           2, //param count
                                                                           parameterSetPointers,
@@ -321,6 +325,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
         callBackRecord.decompressionOutputCallback = didDecompress;
         callBackRecord.decompressionOutputRefCon = NULL;
         //这个是用来做异步解码实现的，decompressionOutputRefCon 为需要指定的对象，即自己。didDecompress则为回调函数。
+        //将需要sps、pps和数据格式、解码回调都包装到_deocderSession中
         status = VTDecompressionSessionCreate(kCFAllocatorDefault,
                                               _decoderFormatDescription,
                                               NULL, attrs,
@@ -352,7 +357,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
 
 -(CVPixelBufferRef)decode:(TYVideoPacket*)vp {
     CVPixelBufferRef outputPixelBuffer = NULL;
-    
+    //由编码的数据（I、P、B帧数据）创建CMBlockBuffer。
     CMBlockBufferRef blockBuffer = NULL;
     OSStatus status  = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
                                                           (void*)vp.buffer, vp.size,
@@ -362,6 +367,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     if(status == kCMBlockBufferNoErr) {
         CMSampleBufferRef sampleBuffer = NULL;
         const size_t sampleSizeArray[] = {vp.size};
+        //由CMBlockBuffer和CMVideoFormatDescription创建CMSampleBuffer
         status = CMSampleBufferCreateReady(kCFAllocatorDefault,
                                            blockBuffer,
                                            _decoderFormatDescription ,
