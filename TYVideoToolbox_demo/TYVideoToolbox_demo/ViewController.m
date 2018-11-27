@@ -39,7 +39,7 @@
     [_muArray addObject:@"解码"];
     [_muArray addObject:@"编解吗"];
     [_muArray addObject:@"音频编码"];
-    [_muArray addObject:@"音频解吗"];
+    [_muArray addObject:@"整合音视频编解码"];
     [_muArray addObject:@"音频编解吗"];
     return _muArray;
 }

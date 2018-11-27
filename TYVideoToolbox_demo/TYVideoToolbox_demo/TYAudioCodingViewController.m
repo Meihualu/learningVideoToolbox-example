@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "TYAudioCoding.h"
+#import "TYAudioPlayback.h"
 
 @interface TYAudioCodingViewController ()<AVCaptureAudioDataOutputSampleBufferDelegate>
 @property (nonatomic, strong) AVCaptureSession *session;
@@ -17,6 +18,7 @@
 @property (nonatomic, strong) AVCaptureConnection *audioConnection;
 @property (nonatomic, strong) TYAudioCoding *audioCoding;
 @property (nonatomic, strong) NSFileHandle *audioFileHandle;
+@property (nonatomic, strong) TYAudioPlayback *audioPlay;
 @end
 
 @implementation TYAudioCodingViewController
@@ -26,6 +28,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     [self createFileToDocument];
+    [self addButView];
 }
 
 #pragma mark 创建文件夹句柄
@@ -57,7 +60,11 @@
 - (void)selectorBut:(UIButton *)but{
     but.selected = !but.selected;
     if (but.selected) {
-        [self accessAudioEquipment];
+        if (_session == nil) {
+            [self accessAudioEquipment];
+            [self.session commitConfiguration];
+        }
+        [self.session startRunning];
         [but setTitle:@"停止" forState:UIControlStateNormal];
     }else{
         [self stopCarmera];
@@ -68,11 +75,13 @@
 - (void)selectorBut1:(UIButton *)but{
     but.selected = !but.selected;
     if (but.selected) {
-        
+        [self audioPlayback];
     }
 }
 
+
 - (void)accessAudioEquipment{
+    //这里是初始化音频封装
     self.audioCoding = [[TYAudioCoding alloc] init];
     //创建session
     self.session = [[AVCaptureSession alloc] init];
@@ -110,10 +119,17 @@
     [_session stopRunning];
 }
 
+- (void)audioPlayback{
+    if (!_audioPlay) {
+        _audioPlay = [[TYAudioPlayback alloc] init];
+    }
+    [_audioPlay play];
+}
+
 #pragma mark -- AVCaptureAudioDataOutputSampleBufferDelegate
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     if(connection == _audioConnection){
-        __weak typeof(self) weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         [self.audioCoding encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
             if (encodedData) {
                 [weakSelf.audioFileHandle writeData:encodedData];

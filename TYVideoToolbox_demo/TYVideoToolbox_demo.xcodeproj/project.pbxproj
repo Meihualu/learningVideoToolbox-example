@@ -21,6 +21,8 @@
 		A2BA88A22199533D00A25068 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88A12199533D00A25068 /* main.m */; };
 		A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */; };
 		A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */; };
+		A2D5F56E21A291EB00D1935D /* TYAudioPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D5F56D21A291EB00D1935D /* TYAudioPlayback.m */; };
+		A2EFC26221AD21ED00249F4B /* TYlLntegrationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,10 @@
 		A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCodingViewController.m; sourceTree = "<group>"; };
 		A2BA88AC21996FB300A25068 /* TYEncodeVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYEncodeVideo.h; sourceTree = "<group>"; };
 		A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYEncodeVideo.m; sourceTree = "<group>"; };
+		A2D5F56C21A291EB00D1935D /* TYAudioPlayback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYAudioPlayback.h; sourceTree = "<group>"; };
+		A2D5F56D21A291EB00D1935D /* TYAudioPlayback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioPlayback.m; sourceTree = "<group>"; };
+		A2EFC26021AD21ED00249F4B /* TYlLntegrationCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYlLntegrationCodeViewController.h; sourceTree = "<group>"; };
+		A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYlLntegrationCodeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +109,9 @@
 				A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */,
 				A27A5D4D219EA74300009991 /* TYAudioCoding.h */,
 				A27A5D4E219EA74300009991 /* TYAudioCoding.m */,
+				A2D5F56C21A291EB00D1935D /* TYAudioPlayback.h */,
+				A2D5F56D21A291EB00D1935D /* TYAudioPlayback.m */,
+				A2EFC25F21AD21BB00249F4B /* IntegrationCode */,
 				A2BA889B2199533D00A25068 /* Assets.xcassets */,
 				A2BA889D2199533D00A25068 /* LaunchScreen.storyboard */,
 				A2BA88A02199533D00A25068 /* Info.plist */,
@@ -111,6 +120,15 @@
 				A2BA88982199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld */,
 			);
 			path = TYVideoToolbox_demo;
+			sourceTree = "<group>";
+		};
+		A2EFC25F21AD21BB00249F4B /* IntegrationCode */ = {
+			isa = PBXGroup;
+			children = (
+				A2EFC26021AD21ED00249F4B /* TYlLntegrationCodeViewController.h */,
+				A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */,
+			);
+			path = IntegrationCode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,12 +203,14 @@
 			files = (
 				A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */,
 				A27A5D4F219EA74300009991 /* TYAudioCoding.m in Sources */,
+				A2D5F56E21A291EB00D1935D /* TYAudioPlayback.m in Sources */,
 				A2B91E35219AD5260047A60C /* TYDecodingViewController.m in Sources */,
 				A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */,
 				A2BA88942199533D00A25068 /* ViewController.m in Sources */,
 				A2BA889A2199533D00A25068 /* TYVideoToolbox_demo.xcdatamodeld in Sources */,
 				A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */,
 				A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */,
+				A2EFC26221AD21ED00249F4B /* TYlLntegrationCodeViewController.m in Sources */,
 				A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */,
 				A27A5D4C219E9B9D00009991 /* TYAudioCodingViewController.m in Sources */,
 				A2BA88A22199533D00A25068 /* main.m in Sources */,

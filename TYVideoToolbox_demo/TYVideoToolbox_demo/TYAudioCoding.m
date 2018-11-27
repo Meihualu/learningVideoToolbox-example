@@ -40,9 +40,10 @@
  *  @param sampleBuffer 音频
  */
 - (void) setupEncoderFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    
+    //格式化音频数据
     AudioStreamBasicDescription inAudioStreamBasicDescription = *CMAudioFormatDescriptionGetStreamBasicDescription((CMAudioFormatDescriptionRef)CMSampleBufferGetFormatDescription(sampleBuffer));
     
+    //下部是设置自己的音频数据格式，上部是获取本来的数据结构。
     AudioStreamBasicDescription outAudioStreamBasicDescription = {0}; // 初始化输出流的结构体描述为0. 很重要。
     outAudioStreamBasicDescription.mSampleRate = inAudioStreamBasicDescription.mSampleRate; // 音频流，在正常播放情况下的帧率。如果是压缩的格式，这个属性表示解压缩后的帧率。帧率不能为0。
     outAudioStreamBasicDescription.mFormatID = kAudioFormatMPEG4AAC; // 设置编码格式
@@ -113,7 +114,7 @@
 }
 /**
  *  A callback function that supplies audio data to convert. This callback is invoked repeatedly as the converter is ready for new input data.
- 
+ 一个回调函数提供音频数据转换。反复调用这个回调的转换器是准备新的输入数据。
  */
 static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
 {
@@ -122,6 +123,7 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
     //NSLog(@"Number of packets requested: %d", (unsigned int)requestedPackets);
     size_t copiedSamples = [encoder copyPCMSamplesIntoBuffer:ioData];
     if (copiedSamples < requestedPackets) {
+        //PCM 缓冲区还没满
         //NSLog(@"PCM buffer isn't full enough!");
         *ioNumberDataPackets = 0;
         return -1;
@@ -152,8 +154,11 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
         if (!_audioConverter) {
             [self setupEncoderFromSampleBuffer:sampleBuffer];
         }
+        //获取到PCM数据并传入编码器
+        //获取真正的音频帧数据
         CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
         CFRetain(blockBuffer);
+        //获取_pcmBufferSize和_pcmBuffer两个数据
         OSStatus status = CMBlockBufferGetDataPointer(blockBuffer, 0, NULL, &_pcmBufferSize, &_pcmBuffer);
         NSError *error = nil;
         if (status != kCMBlockBufferNoErr) {
@@ -162,6 +167,7 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
         //NSLog(@"PCM Buffer Size: %zu", _pcmBufferSize);
         
         memset(_aacBuffer, 0, _aacBufferSize);
+        //填写好BufferList数据
         AudioBufferList outAudioBufferList = {0};
         outAudioBufferList.mNumberBuffers = 1;
         outAudioBufferList.mBuffers[0].mNumberChannels = 1;
@@ -169,10 +175,11 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
         outAudioBufferList.mBuffers[0].mData = _aacBuffer;
         AudioStreamPacketDescription *outPacketDescription = NULL;
         UInt32 ioOutputDataPacketSize = 1;
+        //将编码好的数据在inInputDataProc填充到缓存区中去。
         status = AudioConverterFillComplexBuffer(_audioConverter, inInputDataProc, (__bridge void *)(self), &ioOutputDataPacketSize, &outAudioBufferList, outPacketDescription);
         //NSLog(@"ioOutputDataPacketSize: %d", (unsigned int)ioOutputDataPacketSize);
         NSData *data = nil;
-        
+        //得到rawAAC码流，添加ADTS头，并写入文件
         if (status == 0) {
             NSData *rawAAC = [NSData dataWithBytes:outAudioBufferList.mBuffers[0].mData length:outAudioBufferList.mBuffers[0].mDataByteSize];
             NSData *adtsHeader = [self adtsDataForPacketLength:rawAAC.length];
@@ -195,6 +202,7 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
 
 
 /**
+ 添加ADTS头
  *  Add ADTS header at the beginning of each and every AAC packet.
  *  This is needed as MediaCodec encoder generates a packet of raw
  *  AAC data.
