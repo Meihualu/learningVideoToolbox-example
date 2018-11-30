@@ -8,15 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
-@protocol TYEncodeVideoDelegate<NSObject>
-- (void)getSpsPps:(NSData*)sps pps:(NSData*)pps;
-- (void)getEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame;
-@end
-@interface TYEncodeVideo : NSObject
-- (void)initEncodeVideo;
-- (void)initVideoToolBox;
-- (void)encode:(CMSampleBufferRef )sampleBuffer;
-- (void)end;
-@property (nonatomic, weak) id<TYEncodeVideoDelegate> delegate;
-@property (nonatomic, weak) NSString *error;
+#include "TYVideoEncodingAgent.h"
+
+
+@interface TYEncodeVideo : NSObject<TYVideoEncodingAgent>
+//- (void)initEncodeVideo;
+//- (void)initVideoToolBox;
+//- (void)encode:(CMSampleBufferRef )sampleBuffer;
+//- (void)end;
+//@property (nonatomic, weak) NSString *error;
 @end

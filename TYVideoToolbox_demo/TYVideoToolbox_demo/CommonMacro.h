@@ -12,4 +12,8 @@
 #define W [UIScreen mainScreen].bounds.size.width
 #define H [UIScreen mainScreen].bounds.size.height
 
+#ifdef __OBJC__
+
+#import "LFAudioFrame.h"
+#endif
 #endif /* CommonMacro_h */

@@ -11,6 +11,7 @@
 #import "TYDecodingViewController.h"
 #import "TYStyleCodecViewController.h"
 #import "TYAudioCodingViewController.h"
+#import "TYlLntegrationCodeViewController.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSMutableArray *muArray;
@@ -74,6 +75,9 @@
         [self.navigationController pushViewController:vc animated:YES];
     }else if(indexPath.row == 3){
         TYAudioCodingViewController *vc = [[TYAudioCodingViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if(indexPath.row == 4){
+        TYlLntegrationCodeViewController *vc = [[TYlLntegrationCodeViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

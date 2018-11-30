@@ -7,6 +7,8 @@
 //
 
 #import "TYEncodeVideo.h"
+#import "LFVideoFrame.h"
+
 @interface TYEncodeVideo(){
     VTCompressionSessionRef encodingSession;
     dispatch_queue_t encodeQueue;
@@ -14,7 +16,7 @@
     NSData *pps;
     int  frameCount;
 }
-
+@property (nonatomic, weak) id<TYVideoEncodingAgentDelegate> delegate;
 @end
 
 @implementation TYEncodeVideo
@@ -41,6 +43,9 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         NSLog(@"didCompressH264 data is not ready ");
         return;
     }
+    
+    uint64_t timeStamp = [((__bridge_transfer NSNumber *)sourceFrameRefCon) longLongValue];
+    
     TYEncodeVideo* encoder = (__bridge TYEncodeVideo*)outputCallbackRefCon;
     
     // Check if we have got a key frame first
@@ -70,9 +75,9 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
                 // 获取SPS和PPS data
                 encoder->sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];
                 encoder->pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];
-                if (encoder->_delegate)
+                if (encoder.delegate)
                 {
-                    [encoder->_delegate getSpsPps:encoder->sps pps:encoder->pps];
+                    [encoder.delegate getSpsPps:encoder->sps pps:encoder->pps];
                 }
             }
         }
@@ -98,9 +103,22 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
             // 从大端转系统端
             NALUnitLength = CFSwapInt32BigToHost(NALUnitLength);
             
-            NSData* data = [[NSData alloc] initWithBytes:(dataPointer + bufferOffset + AVCCHeaderLength) length:NALUnitLength];
-            [encoder->_delegate getEncodedData:data isKeyFrame:keyframe];
+            LFVideoFrame *videoFrame = [LFVideoFrame new];
+            videoFrame.timestamp = timeStamp;
             
+            NSData* data = [[NSData alloc] initWithBytes:(dataPointer + bufferOffset + AVCCHeaderLength) length:NALUnitLength];
+            videoFrame.data = data;
+            videoFrame.isKeyFrame = keyframe;
+            videoFrame.sps = encoder->sps;
+            videoFrame.pps = encoder->pps;
+            
+            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(getEncodedData:isKeyFrame:)]) {
+                [encoder.delegate getEncodedData:data isKeyFrame:keyframe];
+            }
+            
+            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(videoEncoder:videoFrame:)]) {
+                [encoder.delegate videoEncoder:encoder videoFrame:videoFrame];
+            }
             // 移动到下一个NALU单元
             bufferOffset += AVCCHeaderLength + NALUnitLength;
         }
@@ -188,6 +206,10 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         NSLog(@"H264: VTCompressionSessionEncodeFrame Success");
     });
     
+}
+
+- (void)setDelegete:(nullable id<TYVideoEncodingAgentDelegate>)delegate{
+    _delegate = delegate;
 }
 
 - (void)end{

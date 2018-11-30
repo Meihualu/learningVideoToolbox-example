@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "TYEncodeVideo.h"
-@interface TYCodingViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate, TYEncodeVideoDelegate>
+#import "TYVideoEncodingAgent.h"
+@interface TYCodingViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate, TYVideoEncodingAgentDelegate>
 
 @end

@@ -111,7 +111,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264FileSavePath];
     //初始化编码代码
     [h264Encoder initVideoToolBox];
-    h264Encoder.delegate = self;
+    [h264Encoder setDelegete:self];
 }
 
 - (void)cancelBut{
