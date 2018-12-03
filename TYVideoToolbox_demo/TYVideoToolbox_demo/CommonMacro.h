@@ -15,5 +15,11 @@
 #ifdef __OBJC__
 
 #import "LFAudioFrame.h"
+#import "TYAudioPlayback.h"
+#import "TYH264Packager.h"
+#import "TYStreamSession.h"
+#import "TYRtmpTypes.h"
+#import "TYRtmpSession.h"
+#import "TYRtmpConfig.h"
 #endif
 #endif /* CommonMacro_h */

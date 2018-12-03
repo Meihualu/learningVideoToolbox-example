@@ -12,7 +12,7 @@
 #import "TYVideoEncodingAgent.h"
 #import "LFStreamSocket.h"
 #import "LFStreamRTMPSocket.h"
-@interface TYlLntegrationCodeViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,TYVideoEncodingAgentDelegate,LFStreamSocketDelegate>
+@interface TYlLntegrationCodeViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,TYVideoEncodingAgentDelegate,LFStreamSocketDelegate,TYH264PackagerDelegate,TYRtmpSessionDeleagte>
 /** The reconnectInterval control reconnect timeInterval(重连间隔) *.*/
 @property (nonatomic, assign) NSUInteger reconnectInterval;
 

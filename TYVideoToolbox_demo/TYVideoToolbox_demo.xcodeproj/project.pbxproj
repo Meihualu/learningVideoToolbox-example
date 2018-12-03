@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A22C768E21B51A7500707719 /* TYH264Packager.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C768D21B51A7500707719 /* TYH264Packager.m */; };
+		A22C769121B51C9300707719 /* TYFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C769021B51C9300707719 /* TYFrame.m */; };
+		A22C769821B52BCC00707719 /* TYRtmpSession.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C769721B52BCC00707719 /* TYRtmpSession.m */; };
+		A22C769B21B52BE200707719 /* TYRtmpConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C769A21B52BE200707719 /* TYRtmpConfig.m */; };
+		A22C769E21B52E2300707719 /* TYStreamSession.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C769D21B52E2300707719 /* TYStreamSession.m */; };
+		A22C76A121B5328200707719 /* NSString+URL.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C76A021B5328200707719 /* NSString+URL.m */; };
+		A22C76A421B533A000707719 /* NSMutableData+Buffer.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C76A321B533A000707719 /* NSMutableData+Buffer.m */; };
 		A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CA219BF6C2007DF39E /* TYPlayLayer.m */; };
 		A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948CD219BFBC5007DF39E /* TYToGetData.m */; };
 		A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */; };
@@ -216,6 +223,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A22C768C21B51A7500707719 /* TYH264Packager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYH264Packager.h; sourceTree = "<group>"; };
+		A22C768D21B51A7500707719 /* TYH264Packager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYH264Packager.m; sourceTree = "<group>"; };
+		A22C768F21B51C9300707719 /* TYFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYFrame.h; sourceTree = "<group>"; };
+		A22C769021B51C9300707719 /* TYFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYFrame.m; sourceTree = "<group>"; };
+		A22C769521B51D2800707719 /* TYRtmpTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYRtmpTypes.h; sourceTree = "<group>"; };
+		A22C769621B52BCC00707719 /* TYRtmpSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYRtmpSession.h; sourceTree = "<group>"; };
+		A22C769721B52BCC00707719 /* TYRtmpSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYRtmpSession.m; sourceTree = "<group>"; };
+		A22C769921B52BE200707719 /* TYRtmpConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYRtmpConfig.h; sourceTree = "<group>"; };
+		A22C769A21B52BE200707719 /* TYRtmpConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYRtmpConfig.m; sourceTree = "<group>"; };
+		A22C769C21B52E2300707719 /* TYStreamSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYStreamSession.h; sourceTree = "<group>"; };
+		A22C769D21B52E2300707719 /* TYStreamSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYStreamSession.m; sourceTree = "<group>"; };
+		A22C769F21B5328200707719 /* NSString+URL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+URL.h"; sourceTree = "<group>"; };
+		A22C76A021B5328200707719 /* NSString+URL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+URL.m"; sourceTree = "<group>"; };
+		A22C76A221B533A000707719 /* NSMutableData+Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableData+Buffer.h"; sourceTree = "<group>"; };
+		A22C76A321B533A000707719 /* NSMutableData+Buffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableData+Buffer.m"; sourceTree = "<group>"; };
 		A25948C9219BF6C2007DF39E /* TYPlayLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYPlayLayer.h; sourceTree = "<group>"; };
 		A25948CA219BF6C2007DF39E /* TYPlayLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYPlayLayer.m; sourceTree = "<group>"; };
 		A25948CC219BFBC5007DF39E /* TYToGetData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYToGetData.h; sourceTree = "<group>"; };
@@ -1116,6 +1138,21 @@
 			children = (
 				A2EFC26021AD21ED00249F4B /* TYlLntegrationCodeViewController.h */,
 				A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */,
+				A22C768C21B51A7500707719 /* TYH264Packager.h */,
+				A22C768D21B51A7500707719 /* TYH264Packager.m */,
+				A22C769521B51D2800707719 /* TYRtmpTypes.h */,
+				A22C768F21B51C9300707719 /* TYFrame.h */,
+				A22C769021B51C9300707719 /* TYFrame.m */,
+				A22C769621B52BCC00707719 /* TYRtmpSession.h */,
+				A22C769721B52BCC00707719 /* TYRtmpSession.m */,
+				A22C769921B52BE200707719 /* TYRtmpConfig.h */,
+				A22C769A21B52BE200707719 /* TYRtmpConfig.m */,
+				A22C769C21B52E2300707719 /* TYStreamSession.h */,
+				A22C769D21B52E2300707719 /* TYStreamSession.m */,
+				A22C769F21B5328200707719 /* NSString+URL.h */,
+				A22C76A021B5328200707719 /* NSString+URL.m */,
+				A22C76A221B533A000707719 /* NSMutableData+Buffer.h */,
+				A22C76A321B533A000707719 /* NSMutableData+Buffer.m */,
 				A2DF7A9F21AE947B005D9BBE /* LFStreamingBuffer.h */,
 				A2DF7AA021AE947B005D9BBE /* LFStreamingBuffer.m */,
 				A2A3387221B11BC0001A178B /* LFVideoFrame.h */,
@@ -1240,6 +1277,7 @@
 				A2A33A2421B138D2001A178B /* GPUImageEmbossFilter.m in Sources */,
 				A2A33A2121B138D2001A178B /* GPUImageDirectionalSobelEdgeDetectionFilter.m in Sources */,
 				A2A33A1321B138D2001A178B /* GPUImageColorInvertFilter.m in Sources */,
+				A22C769821B52BCC00707719 /* TYRtmpSession.m in Sources */,
 				A25948CB219BF6C2007DF39E /* TYPlayLayer.m in Sources */,
 				A27A5D4F219EA74300009991 /* TYAudioCoding.m in Sources */,
 				A2A33A2C21B138D2001A178B /* GPUImageFilterPipeline.m in Sources */,
@@ -1252,6 +1290,7 @@
 				A2A33A6A21B138D2001A178B /* GPUImagePixellatePositionFilter.m in Sources */,
 				A2A33A4E21B138D2001A178B /* GPUImageLocalBinaryPatternFilter.m in Sources */,
 				A2A33A5121B138D2001A178B /* GPUImageLuminanceRangeFilter.m in Sources */,
+				A22C769E21B52E2300707719 /* TYStreamSession.m in Sources */,
 				A2A33A5721B138D2001A178B /* GPUImageMissEtikateFilter.m in Sources */,
 				A2A339FE21B138D2001A178B /* GPUImage3x3TextureSamplingFilter.m in Sources */,
 				A2A33A0721B138D2001A178B /* GPUImageBrightnessFilter.m in Sources */,
@@ -1272,6 +1311,7 @@
 				A2A33A7E21B138D3001A178B /* GPUImageSketchFilter.m in Sources */,
 				A2A33A5421B138D2001A178B /* GPUImageLuminosityBlendFilter.m in Sources */,
 				A2A33AB321B14202001A178B /* LFFrame.m in Sources */,
+				A22C769B21B52BE200707719 /* TYRtmpConfig.m in Sources */,
 				A2A33A4121B138D2001A178B /* GPUImageHSBFilter.m in Sources */,
 				A2A33A7921B138D2001A178B /* GPUImageScreenBlendFilter.m in Sources */,
 				A2A33A1C21B138D2001A178B /* GPUImageCrosshatchFilter.m in Sources */,
@@ -1318,6 +1358,7 @@
 				A2A33A2321B138D2001A178B /* GPUImageDivideBlendFilter.m in Sources */,
 				A2A33A3F21B138D2001A178B /* GPUImageHistogramGenerator.m in Sources */,
 				A2A33A8D21B138D3001A178B /* GPUImageTextureOutput.m in Sources */,
+				A22C76A421B533A000707719 /* NSMutableData+Buffer.m in Sources */,
 				A2A33A0F21B138D2001A178B /* GPUImageColorBlendFilter.m in Sources */,
 				A2A33A5B21B138D2001A178B /* GPUImageMotionDetector.m in Sources */,
 				A2A33A9721B138D3001A178B /* GPUImageTwoInputFilter.m in Sources */,
@@ -1358,6 +1399,7 @@
 				A2A33AB021B1396D001A178B /* LFAudioFrame.m in Sources */,
 				A2A33A4921B138D2001A178B /* GPUImageLaplacianFilter.m in Sources */,
 				A2A33A8921B138D3001A178B /* GPUImageStretchDistortionFilter.m in Sources */,
+				A22C768E21B51A7500707719 /* TYH264Packager.m in Sources */,
 				A2EFC26221AD21ED00249F4B /* TYlLntegrationCodeViewController.m in Sources */,
 				A25948CE219BFBC5007DF39E /* TYToGetData.m in Sources */,
 				A2A33A1B21B138D2001A178B /* GPUImageCrosshairGenerator.m in Sources */,
@@ -1380,6 +1422,7 @@
 				A2A33A1221B138D2001A178B /* GPUImageColorDodgeBlendFilter.m in Sources */,
 				A2A33AA521B138D3001A178B /* GPUImagePicture+TextureSubimage.m in Sources */,
 				A2A33A6B21B138D2001A178B /* GPUImagePoissonBlendFilter.m in Sources */,
+				A22C769121B51C9300707719 /* TYFrame.m in Sources */,
 				A2A33AA321B138D3001A178B /* GPUImageContext.m in Sources */,
 				A2A33A8421B138D3001A178B /* GPUImageSolarizeFilter.m in Sources */,
 				A2A33A8721B138D3001A178B /* GPUImageSphereRefractionFilter.m in Sources */,
@@ -1404,6 +1447,7 @@
 				A2BA88A22199533D00A25068 /* main.m in Sources */,
 				A2BA88912199533D00A25068 /* AppDelegate.m in Sources */,
 				A2A33AAC21B138D3001A178B /* parseurl.c in Sources */,
+				A22C76A121B5328200707719 /* NSString+URL.m in Sources */,
 				A2A33A4A21B138D2001A178B /* GPUImageLevelsFilter.m in Sources */,
 				A2A33A0021B138D2001A178B /* GPUImageAddBlendFilter.m in Sources */,
 				A2A33AAB21B138D3001A178B /* log.c in Sources */,

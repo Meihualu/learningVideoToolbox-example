@@ -75,9 +75,9 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
                 // 获取SPS和PPS data
                 encoder->sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];
                 encoder->pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];
-                if (encoder.delegate)
+                if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(getSpsPps:pps:timestamp:)])
                 {
-                    [encoder.delegate getSpsPps:encoder->sps pps:encoder->pps];
+                    [encoder.delegate getSpsPps:encoder->sps pps:encoder->pps timestamp:timeStamp];
                 }
             }
         }
@@ -112,8 +112,8 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
             videoFrame.sps = encoder->sps;
             videoFrame.pps = encoder->pps;
             
-            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(getEncodedData:isKeyFrame:)]) {
-                [encoder.delegate getEncodedData:data isKeyFrame:keyframe];
+            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(getEncodedData:timestamp:isKeyFrame:)]) {
+                [encoder.delegate getEncodedData:data timestamp:timeStamp isKeyFrame:keyframe];
             }
             
             if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(videoEncoder:videoFrame:)]) {

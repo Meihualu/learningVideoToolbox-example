@@ -10,8 +10,8 @@
 #import "LFVideoFrame.h"
 @protocol TYVideoEncodingAgent;
 @protocol TYVideoEncodingAgentDelegate<NSObject>
-- (void)getSpsPps:(nullable NSData *)sps pps:(nullable  NSData*)pps;
-- (void)getEncodedData:(nullable  NSData *)data isKeyFrame:(BOOL)isKeyFrame;
+- (void)getSpsPps:(nullable NSData *)sps pps:(nullable  NSData*)pps timestamp:(uint64_t)timestamp;
+- (void)getEncodedData:(nullable  NSData *)data timestamp:(uint64_t)timestamp isKeyFrame:(BOOL)isKeyFrame;
 - (void)videoEncoder:(nullable id<TYVideoEncodingAgent>)encoder videoFrame:(nullable LFVideoFrame *)frame;
 @end
 @protocol TYVideoEncodingAgent <NSObject>

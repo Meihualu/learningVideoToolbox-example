@@ -31,9 +31,33 @@
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 /// 流信息
 @property (nonatomic, strong) LFLiveStreamInfo *streamInfo;
+///数据包装
+@property (nonatomic, strong) TYH264Packager *h264Packager;
+///连接握手
+@property (nonatomic, strong) TYRtmpSession *rtmpSession;
+/**
+ *  视频尺寸,默认640 * 480
+ */
+@property (nonatomic,assign) CGSize videoSize;
 @end
 
 @implementation TYlLntegrationCodeViewController
+#pragma mark 懒加载
+- (TYH264Packager *)h264Packager{
+    if (!_h264Packager) {
+        _h264Packager = [[TYH264Packager alloc] init];
+        _h264Packager.delegate = self;
+    }
+    return _h264Packager;
+}
+
+//- (TYRtmpSession *)rtmpSession{
+//    if(!_rtmpSession){
+//        _rtmpSession = [[TYRtmpSession alloc] init];
+//        
+//        TYRtmpConfig *config = [[TYRtmpConfig alloc] init];
+//    }
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -150,8 +174,8 @@
 -(void)captureOutput:(AVCaptureOutput*)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection*)connection
 {
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
-    CGSize imageSize = CVImageBufferGetEncodedSize( imageBuffer );
-    NSLog(@"ImageBufferSize------width:%.1f,heigh:%.1f",imageSize.width,imageSize.height);
+    _videoSize = CVImageBufferGetEncodedSize( imageBuffer );
+    NSLog(@"ImageBufferSize------width:%.1f,heigh:%.1f",_videoSize.width,_videoSize.height);
     
     //直接把samplebuffer传给AVSampleBufferDisplayLayer进行预览播放
     if(connection == connectionVideo){
@@ -162,9 +186,10 @@
 }
 
 #pragma mark - H264HwEncoderImplDelegate delegate 解码代理
-- (void)getSpsPps:(NSData*)sps pps:(NSData*)pps
+- (void)getSpsPps:(NSData*)sps pps:(nullable NSData *)pps timestamp:(uint64_t)timestamp
 {
     NSLog(@"gotSpsPps %d %d", (int)[sps length], (int)[pps length]);
+    [self.h264Packager packageKeyFrameSps:sps pps:pps timestamp:timestamp];
     //[sps writeToFile:h264FileSavePath atomically:YES];
     //[pps writeToFile:h264FileSavePath atomically:YES];
     // write(fd, [sps bytes], [sps length]);
@@ -178,9 +203,10 @@
 //    [fileHandle writeData:pps];
     
 }
-- (void)getEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame
+- (void)getEncodedData:(NSData*)data timestamp:(uint64_t)timestamp isKeyFrame:(BOOL)isKeyFrame
 {
     NSLog(@"gotEncodedData %d", (int)[data length]);
+    [self.h264Packager packageFrame:data timestamp:timestamp isKeyFrame:isKeyFrame];
     //    static int framecount = 1;
     
     // [data writeToFile:h264FileSavePath atomically:YES];
@@ -195,6 +221,12 @@
 //        [fileHandle writeData:data];
 //    }
 }
+
+#pragma makr 数据包装后的回调TYH264PackagerDelegate
+- (void)h264Packager:(TYH264Packager *)packager didPacketFrame:(TYFrame *)frame{
+    
+}
+
 
 - (void)videoEncoder:(id<TYVideoEncodingAgent>)encoder videoFrame:(LFVideoFrame *)frame{
     if(_uploading){
