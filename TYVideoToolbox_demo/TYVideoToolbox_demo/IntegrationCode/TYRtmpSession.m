@@ -333,6 +333,7 @@ static const size_t kRTMPSignatureSize = 1536;
         NSData *tosend = [NSData dataWithBytes:outp length:offset];
         free(outp);
         [self writeData:tosend];
+        NSLog(@"在这里之前就出错了--:%d",streamId);
     });
 }
 

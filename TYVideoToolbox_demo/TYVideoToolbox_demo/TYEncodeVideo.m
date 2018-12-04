@@ -150,7 +150,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         VTSessionSetProperty(encodingSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, frameIntervalRef);
         
         //设置期望帧率
-        int fps = 24;
+        int fps = 15;
         CFNumberRef  fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &fps);
         VTSessionSetProperty(encodingSession, kVTCompressionPropertyKey_ExpectedFrameRate, fpsRef);
         

@@ -10,7 +10,8 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-
+#define NOW (CACurrentMediaTime()*1000)
+#define RTMP_URL  @"rtmp://10.10.60.114:1935/rtmplive/room"
 @interface TYlLntegrationCodeViewController (){
     AVCaptureSession *captureSession;
     dispatch_queue_t audioQueue;
@@ -19,6 +20,11 @@
     AVSampleBufferDisplayLayer *sbDisplayLayer;
     UIButton *recordingBut;
     NSFileHandle *fileHandle; //编码后的数据储存器
+    /**
+     *  是否可以发送数据
+     */
+    BOOL     _sendable;
+    uint64_t _startTime;
 }
 @property (nullable, strong) id<TYVideoEncodingAgent> h264Encoder;
 /// 是否开始上传
@@ -39,6 +45,12 @@
  *  视频尺寸,默认640 * 480
  */
 @property (nonatomic,assign) CGSize videoSize;
+///推流url
+@property (nonatomic, copy) NSString *url;
+/**
+ *  当前状态
+ */
+@property (nonatomic,assign,readonly) SGSimpleSessionState state;
 @end
 
 @implementation TYlLntegrationCodeViewController
@@ -50,14 +62,24 @@
     }
     return _h264Packager;
 }
-
-//- (TYRtmpSession *)rtmpSession{
-//    if(!_rtmpSession){
-//        _rtmpSession = [[TYRtmpSession alloc] init];
-//        
-//        TYRtmpConfig *config = [[TYRtmpConfig alloc] init];
-//    }
-//}
+//懒加载推流握手和包装类
+- (TYRtmpSession *)rtmpSession{
+    if(!_rtmpSession){
+        _rtmpSession = [[TYRtmpSession alloc] init];
+        _rtmpSession.delegate = self;
+        TYRtmpConfig *config = [[TYRtmpConfig alloc] init];
+        config.url = _url;
+        config.width = _videoSize.width;
+        config.height = _videoSize.height;
+        config.frameDuration = 1.0 / 15;
+        config.videoBitrate = 512 *1024;
+        //注释部分是音频参数
+//        config.audioSampleRate = self.audioConfig.sampleRate;
+//        config.stereo = self.audioConfig.channels == 2;
+        _rtmpSession.config = config;
+    }
+    return _rtmpSession;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -66,6 +88,7 @@
 //    [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:file];
+    self.url = RTMP_URL;
     _h264Encoder = [TYEncodeVideo alloc];
     [_h264Encoder initEncodeVideo];
     [self accessEquipmentdData];
@@ -224,7 +247,10 @@
 
 #pragma makr 数据包装后的回调TYH264PackagerDelegate
 - (void)h264Packager:(TYH264Packager *)packager didPacketFrame:(TYFrame *)frame{
-    
+    if (_rtmpSession) {
+        //推送数据
+        [self.rtmpSession sendBuffer:frame];
+    }
 }
 
 
@@ -290,12 +316,83 @@
         _uploading = YES;
         [captureSession startRunning];
         [recordingBut setTitle:@"停止" forState:UIControlStateNormal];
+        [self pushFlow];
     }else{
         _uploading = NO;
         [self stopCamera];
         [recordingBut setTitle:@"录制" forState:UIControlStateNormal];
     }
     
+}
+
+- (void)pushFlow{
+    switch (self.state) {
+        case SGSimpleSessionStateConnecting:
+        case SGSimpleSessionStateConnected:
+        {
+            [self endSession];
+        }
+            break;
+            
+        default:
+        {
+            [self startSession];
+        }
+            break;
+    }
+}
+
+- (void)endSession{
+    _state = SGSimpleSessionStateEnd;
+    _sendable = NO;
+    [self.rtmpSession disConnect];
+//    [self.aacPackager reset];
+    [self.h264Packager reset];
+//    //传给外层
+//    if ([self.delegate respondsToSelector:@selector(simpleSession:statusDidChanged:)]) {
+//        [self.delegate simpleSession:self statusDidChanged:_state];
+//    }
+}
+
+- (void)startSession{
+    [self.rtmpSession connect];
+}
+
+#pragma mark- ------SGRtmpSessionDeleagte-------------------
+- (void)rtmpSession:(TYRtmpSession *)rtmpSession didChangeStatus:(TYRtmpSessionStatus)rtmpStatus{
+    switch (rtmpStatus) {
+        case SGRtmpSessionStatusConnected:
+        {
+            _state = SGSimpleSessionStateConnecting;
+        }
+            break;
+        case SGRtmpSessionStatusSessionStarted:
+        {
+            _startTime = NOW;
+            _sendable = YES;
+            _state = SGSimpleSessionStateConnected;
+        }
+            
+            break;
+        case SGRtmpSessionStatusNotConnected:
+        {
+            _state = SGSimpleSessionStateEnd;
+            [self endSession];
+        }
+            break;
+        case SGRtmpSessionStatusError:
+        {
+            _state = SGSimpleSessionStateError;
+            [self endSession];
+        }
+            break;
+        default:
+            break;
+    }
+    
+//    if ([self.delegate respondsToSelector:@selector(simpleSession:statusDidChanged:)]) {
+//        [self.delegate simpleSession:self statusDidChanged:_state];
+//    }
 }
 
 //取消摄像头
