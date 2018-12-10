@@ -12,7 +12,7 @@
 #import "TYVideoEncodingAgent.h"
 #import "LFStreamSocket.h"
 #import "LFStreamRTMPSocket.h"
-
+//#import "lfs"
 /**
  *  连接状态
  */

@@ -244,7 +244,7 @@ SAVC(mp4a);
     [self.buffer removeAllObject];
     self.retryTimes4netWorkBreaken = 0;
 }
-
+//网络连接
 - (NSInteger)RTMP264_Connect:(char *)push_url {
     //由于摄像头的timestamp是一直在累加，需要每次得到相对时间戳
     //分配与初始化

@@ -212,7 +212,7 @@
 - (void)getSpsPps:(NSData*)sps pps:(nullable NSData *)pps timestamp:(uint64_t)timestamp
 {
     NSLog(@"gotSpsPps %d %d", (int)[sps length], (int)[pps length]);
-    [self.h264Packager packageKeyFrameSps:sps pps:pps timestamp:timestamp];
+//    [self.h264Packager packageKeyFrameSps:sps pps:pps timestamp:timestamp];
     //[sps writeToFile:h264FileSavePath atomically:YES];
     //[pps writeToFile:h264FileSavePath atomically:YES];
     // write(fd, [sps bytes], [sps length]);
@@ -229,7 +229,7 @@
 - (void)getEncodedData:(NSData*)data timestamp:(uint64_t)timestamp isKeyFrame:(BOOL)isKeyFrame
 {
     NSLog(@"gotEncodedData %d", (int)[data length]);
-    [self.h264Packager packageFrame:data timestamp:timestamp isKeyFrame:isKeyFrame];
+//    [self.h264Packager packageFrame:data timestamp:timestamp isKeyFrame:isKeyFrame];
     //    static int framecount = 1;
     
     // [data writeToFile:h264FileSavePath atomically:YES];
@@ -247,18 +247,78 @@
 
 #pragma makr 数据包装后的回调TYH264PackagerDelegate
 - (void)h264Packager:(TYH264Packager *)packager didPacketFrame:(TYFrame *)frame{
-    if (_rtmpSession) {
-        //推送数据
-        [self.rtmpSession sendBuffer:frame];
-    }
+//    if (_rtmpSession) {
+//        //推送数据
+//        [self.rtmpSession sendBuffer:frame];
+//    }
 }
 
-
+#pragma makr 用与LFS的推流数据
 - (void)videoEncoder:(id<TYVideoEncodingAgent>)encoder videoFrame:(LFVideoFrame *)frame{
     if(_uploading){
         [self pushSendBuffer:frame];
     }
 }
+
+#pragma mark -- LFStreamTcpSocketDelegate 准备推流
+- (void)socketStatus:(nullable id<LFStreamSocket>)socket status:(LFLiveState)status {
+    if (status == LFLiveStart) {
+        if (!self.uploading) {
+//            self.AVAlignment = NO;
+//            self.hasCaptureAudio = NO;
+//            self.hasKeyFrameVideo = NO;
+            self.relativeTimestamps = 0;
+            self.uploading = YES;
+        }
+    } else if(status == LFLiveStop || status == LFLiveError){
+        self.uploading = NO;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.state = status;
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:liveStateDidChange:)]) {
+//            [self.delegate liveSession:self liveStateDidChange:status];
+//        }
+    });
+}
+
+- (void)socketDidError:(nullable id<LFStreamSocket>)socket errorCode:(LFLiveSocketErrorCode)errorCode {
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:errorCode:)]) {
+//            [self.delegate liveSession:self errorCode:errorCode];
+//        }
+    });
+}
+
+- (void)socketDebug:(nullable id<LFStreamSocket>)socket debugInfo:(nullable LFLiveDebug *)debugInfo {
+//    self.debugInfo = debugInfo;
+//    if (self.showDebugInfo) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:debugInfo:)]) {
+//                [self.delegate liveSession:self debugInfo:debugInfo];
+//            }
+        });
+//    }
+}
+
+- (void)socketBufferStatus:(nullable id<LFStreamSocket>)socket status:(LFLiveBuffferState)status {
+//    if((self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) && self.adaptiveBitrate){
+//        NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
+//        if (status == LFLiveBuffferDecline) {
+//            if (videoBitRate < _videoConfiguration.videoMaxBitRate) {
+//                videoBitRate = videoBitRate + 50 * 1000;
+//                [self.videoEncoder setVideoBitRate:videoBitRate];
+//                NSLog(@"Increase bitrate %@", @(videoBitRate));
+//            }
+//        } else {
+//            if (videoBitRate > self.videoConfiguration.videoMinBitRate) {
+//                videoBitRate = videoBitRate - 100 * 1000;
+//                [self.videoEncoder setVideoBitRate:videoBitRate];
+//                NSLog(@"Decline bitrate %@", @(videoBitRate));
+//            }
+//        }
+//    }
+}
+
 
 #pragma mark -- PrivateMethod
 - (void)pushSendBuffer:(LFFrame*)frame{
@@ -271,6 +331,7 @@
 
 - (id<LFStreamSocket>)socket {
     if (!_socket) {
+        //reconnectInterval和reconnectCount使用来做连接使用的参数
         _socket = [[LFStreamRTMPSocket alloc] initWithStream:self.streamInfo reconnectInterval:self.reconnectInterval reconnectCount:self.reconnectCount];
         [_socket setDelegate:self];
     }
@@ -280,6 +341,7 @@
 - (LFLiveStreamInfo *)streamInfo {
     if (!_streamInfo) {
         _streamInfo = [[LFLiveStreamInfo alloc] init];
+        _streamInfo.url = RTMP_URL;
     }
     return _streamInfo;
 }
@@ -316,7 +378,8 @@
         _uploading = YES;
         [captureSession startRunning];
         [recordingBut setTitle:@"停止" forState:UIControlStateNormal];
-        [self pushFlow];
+        [self.socket start];
+//        [self pushFlow];
     }else{
         _uploading = NO;
         [self stopCamera];
