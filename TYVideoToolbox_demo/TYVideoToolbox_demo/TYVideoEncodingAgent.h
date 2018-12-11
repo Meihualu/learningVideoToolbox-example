@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LFVideoFrame.h"
+#import "TYYUVdeal.h"
 @protocol TYVideoEncodingAgent;
 @protocol TYVideoEncodingAgentDelegate<NSObject>
 - (void)getSpsPps:(nullable NSData *)sps pps:(nullable  NSData*)pps timestamp:(uint64_t)timestamp;
@@ -16,9 +17,10 @@
 @end
 @protocol TYVideoEncodingAgent <NSObject>
 @required
-- (void)initEncodeVideo;
+- (void)initEncodeVideo:(TYYUVdeal *_Nullable)deal;
 - (void)initVideoToolBox;
 - (void)encode:(nullable CMSampleBufferRef )sampleBuffer;
+- (void)encodeYuv:(CMSampleBufferRef )sampleBuffer;
 - (void)end;
 @property (nonatomic, weak) NSString * _Nullable error;
 @optional

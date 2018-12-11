@@ -9,6 +9,7 @@
 #import "TYlLntegrationCodeViewController.h"
 #import <VideoToolbox/VideoToolbox.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "TYYUVdeal.h"
 
 #define NOW (CACurrentMediaTime()*1000)
 #define RTMP_URL  @"rtmp://10.10.60.114:1935/rtmplive/room"
@@ -89,8 +90,9 @@
 //    [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:file];
     self.url = RTMP_URL;
+    TYYUVdeal *deal = [[TYYUVdeal alloc] init];
     _h264Encoder = [TYEncodeVideo alloc];
-    [_h264Encoder initEncodeVideo];
+    [_h264Encoder initEncodeVideo:deal];
     [self accessEquipmentdData];
     [self videoLayer];
     [self addButView];
@@ -203,7 +205,8 @@
     //直接把samplebuffer传给AVSampleBufferDisplayLayer进行预览播放
     if(connection == connectionVideo){
         [sbDisplayLayer enqueueSampleBuffer:sampleBuffer];
-        [_h264Encoder encode:sampleBuffer];
+//        [_h264Encoder encode:sampleBuffer];
+        [_h264Encoder encodeYuv:sampleBuffer];
     }
     
 }

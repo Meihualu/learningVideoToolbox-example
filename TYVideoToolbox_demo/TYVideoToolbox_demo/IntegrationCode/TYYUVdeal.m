@@ -5,10 +5,12 @@
 //  Created by 汤义 on 2018/12/7.
 //  Copyright © 2018年 汤义. All rights reserved.
 //
-#import <AVFoundation/AVFoundation.h>
+
 #import "TYYUVdeal.h"
-#include "libyuv.h"
+//#include "libyuv.h"
 #include "aw_utils.h"
+#include "rotate.h"
+#include "convert_from.h"
 @implementation TYYUVdeal
 -(NSData *)rotateNV12Data:(NSData *)nv12Data{
 //    if (!self.videoConfig.shouldRotate) {

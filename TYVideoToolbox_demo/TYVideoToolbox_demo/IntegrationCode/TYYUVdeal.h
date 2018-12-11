@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #include "aw_encode_flv.h"
-//#include "aw_encode_flv.h"
 @interface TYYUVdeal : NSObject
 //旋转
 -(NSData *)rotateNV12Data:(NSData *)nv12Data;

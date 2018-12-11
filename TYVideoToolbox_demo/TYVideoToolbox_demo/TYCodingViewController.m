@@ -8,7 +8,7 @@
 
 #import "TYCodingViewController.h"
 #import <VideoToolbox/VideoToolbox.h>
-
+#import "TYYUVdeal.h"
 @interface TYCodingViewController (){
     TYEncodeVideo *h264Encoder;
     AVCaptureSession *captureSession;
@@ -27,7 +27,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     h264Encoder = [TYEncodeVideo alloc];
-    [h264Encoder initEncodeVideo];
+    TYYUVdeal *deal = [[TYYUVdeal alloc] init];
+    [h264Encoder initEncodeVideo:deal];
     // 设置文件保存位置在document文件夹
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

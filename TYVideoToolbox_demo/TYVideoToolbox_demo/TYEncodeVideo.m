@@ -8,7 +8,8 @@
 
 #import "TYEncodeVideo.h"
 #import "LFVideoFrame.h"
-
+#import "TYYUVdeal.h"
+#include "aw_utils.h"
 @interface TYEncodeVideo(){
     VTCompressionSessionRef encodingSession;
     dispatch_queue_t encodeQueue;
@@ -17,18 +18,20 @@
     int  frameCount;
 }
 @property (nonatomic, weak) id<TYVideoEncodingAgentDelegate> delegate;
+@property (nonatomic, strong) TYYUVdeal *deal;
 @end
 
 @implementation TYEncodeVideo
 @synthesize error;
 
-- (void)initEncodeVideo{
+- (void)initEncodeVideo:(TYYUVdeal *)deal{
     encodingSession = nil;
 //    initialized = true;
     encodeQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     frameCount = 0;
     sps = NULL;
     pps = NULL;
+    _deal = deal;
 }
 
 // VTCompressionOutputCallback（回调方法）  由VTCompressionSessionCreate调用
@@ -206,6 +209,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
                                                               presentationTimeStamp,
                                                               kCMTimeInvalid,
                                                               NULL, NULL, &flags);
+//        status = VTCompressionSessionEncodeFrame(_vEnSession, pixelBuf, pts, kCMTimeInvalid, NULL, pixelBuf, NULL);
         // Check for error
         if (statusCode != noErr) {
             NSLog(@"H264: VTCompressionSessionEncodeFrame failed with %d", (int)statusCode);
@@ -222,6 +226,129 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
     });
     
 }
+
+- (void)encodeYuv:(CMSampleBufferRef )sampleBuffer // 频繁调用
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_sync(encodeQueue, ^{
+        [weakSelf addYuv:sampleBuffer];
+    });
+
+}
+
+- (void)addYuv:(CMSampleBufferRef )sampleBuffer{
+    frameCount++;
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
+    CGSize videoSize = CVImageBufferGetEncodedSize( imageBuffer );
+    NSLog(@"ImageBufferSize------width:%.1f,heigh:%.1f",videoSize.width,videoSize.height);
+    
+    NSData *yuvData = [_deal convertVideoSmapleBufferToYuvData:sampleBuffer];
+    
+    //视频宽度
+    size_t pixelWidth = videoSize.width;
+    //视频高度
+    size_t pixelHeight = videoSize.height;
+    
+    //现在要把NV12数据放入 CVPixelBufferRef中，因为 硬编码主要调用VTCompressionSessionEncodeFrame函数，此函数不接受yuv数据，但是接受CVPixelBufferRef类型。
+    CVPixelBufferRef pixelBuf = NULL;
+    //初始化pixelBuf，数据类型是kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange，此类型数据格式同NV12格式相同。
+    CVPixelBufferCreate(NULL, pixelWidth, pixelHeight, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, NULL, &pixelBuf);
+    
+    // Lock address，锁定数据，应该是多线程防止重入操作。
+    if(CVPixelBufferLockBaseAddress(pixelBuf, 0) != kCVReturnSuccess){
+        [self onErrorWithCode:@"在这里" des:@"encode video lock base address failed"];
+        return;
+    }
+    
+    //将yuv数据填充到CVPixelBufferRef中
+    size_t y_size = pixelWidth * pixelHeight;
+    size_t uv_size = y_size / 4;
+    uint8_t *yuv_frame = (uint8_t *)yuvData.bytes;
+    
+    //处理y frame
+    uint8_t *y_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 0);
+    memcpy(y_frame, yuv_frame, y_size);
+    
+    uint8_t *uv_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
+    memcpy(uv_frame, yuv_frame + y_size, uv_size * 2);
+    
+    //硬编码 CmSampleBufRef
+    
+    //时间戳
+    //        uint32_t ptsMs = self.manager.timestamp + 1; //self.vFrameCount++ * 1000.f / self.videoConfig.fps;
+    
+    CMTime pts = CMTimeMake(frameCount, 1);
+    
+    VTEncodeInfoFlags flags;
+    //硬编码主要其实就这一句。将携带NV12数据的PixelBuf送到硬编码器中，进行编码。
+    OSStatus statusCode = VTCompressionSessionEncodeFrame(encodingSession, pixelBuf, pts, kCMTimeInvalid, NULL, NULL, &flags);
+    if (statusCode != noErr) {
+        NSLog(@"H264: VTCompressionSessionEncodeFrame failed with %d", (int)statusCode);
+        error = @"H264: VTCompressionSessionEncodeFrame failed ";
+        
+        // End the session
+        VTCompressionSessionInvalidate(encodingSession);
+        CFRelease(encodingSession);
+        encodingSession = NULL;
+        error = NULL;
+        return;
+    }
+    NSLog(@"H264: VTCompressionSessionEncodeFrame Success");
+}
+
+-(void)onErrorWithCode:(NSString *)code des:(NSString *) des{
+    aw_log("[ERROR] encoder error code:%@ des:%s",code, des.UTF8String);
+}
+
+////这里的参数yuvData就是从相机获取的NV12数据。
+//-(aw_flv_video_tag *)encodeYUVDataToFlvTag:(NSData *)yuvData{
+//    if (!_vEnSession) {
+//        return NULL;
+//    }
+//    //yuv 变成 转CVPixelBufferRef
+//    OSStatus status = noErr;
+//
+//    //视频宽度
+//    size_t pixelWidth = self.videoConfig.pushStreamWidth;
+//    //视频高度
+//    size_t pixelHeight = self.videoConfig.pushStreamHeight;
+//
+//    //现在要把NV12数据放入 CVPixelBufferRef中，因为 硬编码主要调用VTCompressionSessionEncodeFrame函数，此函数不接受yuv数据，但是接受CVPixelBufferRef类型。
+//    CVPixelBufferRef pixelBuf = NULL;
+//    //初始化pixelBuf，数据类型是kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange，此类型数据格式同NV12格式相同。
+//    CVPixelBufferCreate(NULL, pixelWidth, pixelHeight, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, NULL, &pixelBuf);
+//
+//    // Lock address，锁定数据，应该是多线程防止重入操作。
+//    if(CVPixelBufferLockBaseAddress(pixelBuf, 0) != kCVReturnSuccess){
+//        [self onErrorWithCode:AWEncoderErrorCodeLockSampleBaseAddressFailed des:@"encode video lock base address failed"];
+//        return NULL;
+//    }
+//
+//    //将yuv数据填充到CVPixelBufferRef中
+//    size_t y_size = pixelWidth * pixelHeight;
+//    size_t uv_size = y_size / 4;
+//    uint8_t *yuv_frame = (uint8_t *)yuvData.bytes;
+//
+//    //处理y frame
+//    uint8_t *y_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 0);
+//    memcpy(y_frame, yuv_frame, y_size);
+//
+//    uint8_t *uv_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
+//    memcpy(uv_frame, yuv_frame + y_size, uv_size * 2);
+//
+//    //硬编码 CmSampleBufRef
+//
+//    //时间戳
+//    uint32_t ptsMs = self.manager.timestamp + 1; //self.vFrameCount++ * 1000.f / self.videoConfig.fps;
+//
+//    CMTime pts = CMTimeMake(ptsMs, 1000);
+//
+//    //硬编码主要其实就这一句。将携带NV12数据的PixelBuf送到硬编码器中，进行编码。
+//    status = VTCompressionSessionEncodeFrame(_vEnSession, pixelBuf, pts, kCMTimeInvalid, NULL, pixelBuf, NULL);
+//
+//    ... ...
+//}
+
 
 //这里的参数yuvData就是从相机获取的NV12数据。
 //-(aw_flv_video_tag *)encodeYUVDataToFlvTag:(NSData *)yuvData{
