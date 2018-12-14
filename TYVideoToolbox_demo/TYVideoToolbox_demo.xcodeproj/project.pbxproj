@@ -208,6 +208,7 @@
 		A25948D1219C0F40007DF39E /* TYStyleCodecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A25948D0219C0F40007DF39E /* TYStyleCodecViewController.m */; };
 		A27A5D4C219E9B9D00009991 /* TYAudioCodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */; };
 		A27A5D4F219EA74300009991 /* TYAudioCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A27A5D4E219EA74300009991 /* TYAudioCoding.m */; };
+		A28A284621C398CB00EB361E /* H264DecodeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A28A284521C398CB00EB361E /* H264DecodeTool.m */; };
 		A2A3387321B11BC0001A178B /* LFVideoFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A3387121B11BC0001A178B /* LFVideoFrame.m */; };
 		A2A3387921B11D4F001A178B /* NSMutableArray+LFAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A3387721B11D4F001A178B /* NSMutableArray+LFAdd.m */; };
 		A2A3387C21B11EFC001A178B /* TYVideoEncodingAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A3387B21B11EFC001A178B /* TYVideoEncodingAgent.m */; };
@@ -646,6 +647,8 @@
 		A27A5D4B219E9B9D00009991 /* TYAudioCodingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioCodingViewController.m; sourceTree = "<group>"; };
 		A27A5D4D219EA74300009991 /* TYAudioCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYAudioCoding.h; sourceTree = "<group>"; };
 		A27A5D4E219EA74300009991 /* TYAudioCoding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioCoding.m; sourceTree = "<group>"; };
+		A28A284421C398CB00EB361E /* H264DecodeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264DecodeTool.h; sourceTree = "<group>"; };
+		A28A284521C398CB00EB361E /* H264DecodeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = H264DecodeTool.m; sourceTree = "<group>"; };
 		A2A3387121B11BC0001A178B /* LFVideoFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFVideoFrame.m; sourceTree = "<group>"; };
 		A2A3387221B11BC0001A178B /* LFVideoFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFVideoFrame.h; sourceTree = "<group>"; };
 		A2A3387721B11D4F001A178B /* NSMutableArray+LFAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LFAdd.m"; sourceTree = "<group>"; };
@@ -1152,6 +1155,15 @@
 			path = "pili-librtmp";
 			sourceTree = "<group>";
 		};
+		A28A284321C398CB00EB361E /* Decoder */ = {
+			isa = PBXGroup;
+			children = (
+				A28A284421C398CB00EB361E /* H264DecodeTool.h */,
+				A28A284521C398CB00EB361E /* H264DecodeTool.m */,
+			);
+			path = Decoder;
+			sourceTree = "<group>";
+		};
 		A2A33AB421B14332001A178B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1180,6 +1192,7 @@
 		A2BA888E2199533D00A25068 /* TYVideoToolbox_demo */ = {
 			isa = PBXGroup;
 			children = (
+				A28A284321C398CB00EB361E /* Decoder */,
 				A2BA888F2199533D00A25068 /* AppDelegate.h */,
 				A2BA88902199533D00A25068 /* AppDelegate.m */,
 				A2BA88922199533D00A25068 /* ViewController.h */,
@@ -1374,6 +1387,7 @@
 				A24049E121BA78DE00AA541A /* GPUImageTwoPassFilter.m in Sources */,
 				A24049BB21BA78DE00AA541A /* GPUImageRGBClosingFilter.m in Sources */,
 				A240496821BA78DE00AA541A /* GPUImageDilationFilter.m in Sources */,
+				A28A284621C398CB00EB361E /* H264DecodeTool.m in Sources */,
 				A24049D721BA78DE00AA541A /* GPUImageThreeInputFilter.m in Sources */,
 				A240497C21BA78DE00AA541A /* GPUImageGaussianSelectiveBlurFilter.m in Sources */,
 				A20510C121BF9B7D007BFE02 /* aw_rtmp.c in Sources */,

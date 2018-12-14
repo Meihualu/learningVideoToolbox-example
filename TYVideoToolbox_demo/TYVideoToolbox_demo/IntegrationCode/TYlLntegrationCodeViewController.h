@@ -12,6 +12,7 @@
 #import "TYVideoEncodingAgent.h"
 #import "LFStreamSocket.h"
 #import "LFStreamRTMPSocket.h"
+#import "H264DecodeTool.h"
 //#import "lfs"
 /**
  *  连接状态
@@ -24,7 +25,7 @@ typedef NS_ENUM(NSUInteger, SGSimpleSessionState) {
     SGSimpleSessionStateEnd,
     SGSimpleSessionStateError,
 };
-@interface TYlLntegrationCodeViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,TYVideoEncodingAgentDelegate,LFStreamSocketDelegate,TYH264PackagerDelegate,TYRtmpSessionDeleagte>
+@interface TYlLntegrationCodeViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,TYVideoEncodingAgentDelegate,LFStreamSocketDelegate,TYH264PackagerDelegate,TYRtmpSessionDeleagte,H264DecodeFrameCallbackDelegate>
 /** The reconnectInterval control reconnect timeInterval(重连间隔) *.*/
 @property (nonatomic, assign) NSUInteger reconnectInterval;
 

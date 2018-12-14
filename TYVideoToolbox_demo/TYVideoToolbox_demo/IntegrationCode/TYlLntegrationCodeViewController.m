@@ -10,7 +10,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "TYYUVdeal.h"
-
+#import "TYPlayLayer.h"
 #define NOW (CACurrentMediaTime()*1000)
 #define RTMP_URL  @"rtmp://10.10.60.114:1935/rtmplive/room"
 @interface TYlLntegrationCodeViewController (){
@@ -52,6 +52,9 @@
  *  当前状态
  */
 @property (nonatomic,assign,readonly) SGSimpleSessionState state;
+
+@property (nonatomic,strong) TYPlayLayer *playLayer;  //解码后播放layer
+@property (nonatomic,strong) H264DecodeTool *h264Decoder;
 @end
 
 @implementation TYlLntegrationCodeViewController
@@ -95,7 +98,16 @@
     [_h264Encoder initEncodeVideo:deal];
     [self accessEquipmentdData];
     [self videoLayer];
+    [self initPlayLayer];
     [self addButView];
+    [self configH264Decoder];
+}
+//初始化解码
+- (void)configH264Decoder{
+    if (!self.h264Decoder) {
+        self.h264Decoder = [[H264DecodeTool alloc] init];
+        self.h264Decoder.delegate = self;
+    }
 }
 
 //获取设备音视的数据
@@ -149,7 +161,7 @@
     //设置视频的屏幕大小
     [captureSession beginConfiguration];
     [captureSession setSessionPreset:AVCaptureSessionPresetHigh];
-    [captureSession setSessionPreset:[NSString stringWithString:AVCaptureSessionPreset1280x720]];
+    [captureSession setSessionPreset:[NSString stringWithString:AVCaptureSessionPreset640x480]];
     
     //设置格式
     connectionVideo = [videoDataOutput connectionWithMediaType:AVMediaTypeVideo];
@@ -167,8 +179,17 @@
     AVSampleBufferDisplayLayer *sbLayer = [[AVSampleBufferDisplayLayer alloc] init];
     sbLayer.backgroundColor = [UIColor blackColor].CGColor;
     sbLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    sbLayer.frame = CGRectMake(0, 0, W, H - 50);
+    sbLayer.frame = CGRectMake(0, 0, W, H/2);
     [self.view.layer addSublayer:sbDisplayLayer = sbLayer];
+}
+
+//解码后的数据页面显示
+- (void)initPlayLayer{
+//    CGFloat height = (self.view.frame.size.height - 100)/2.0 - 20;
+//    CGFloat width = self.view.frame.size.width - 100;
+    self.playLayer = [[TYPlayLayer alloc] initWithFrame:CGRectMake(0, H/2,W,H/2)];
+    self.playLayer.backgroundColor = [UIColor whiteColor].CGColor;
+    [self.view.layer addSublayer:self.playLayer];
 }
 
 - (void)setRelativeVideoOrientation {
@@ -205,8 +226,8 @@
     //直接把samplebuffer传给AVSampleBufferDisplayLayer进行预览播放
     if(connection == connectionVideo){
         [sbDisplayLayer enqueueSampleBuffer:sampleBuffer];
-//        [_h264Encoder encode:sampleBuffer];
-        [_h264Encoder encodeYuv:sampleBuffer];
+        [_h264Encoder encode:sampleBuffer];
+//        [_h264Encoder encodeYuv:sampleBuffer];
     }
     
 }
@@ -228,6 +249,20 @@
 //    [fileHandle writeData:ByteHeader];
 //    [fileHandle writeData:pps];
     
+    //sps
+    NSMutableData *h264Data = [[NSMutableData alloc] init];
+    [h264Data appendData:ByteHeader];
+    [h264Data appendData:sps];
+    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
+    
+    
+    //pps
+    [h264Data resetBytesInRange:NSMakeRange(0, [h264Data length])];
+    [h264Data setLength:0];
+    [h264Data appendData:ByteHeader];
+    [h264Data appendData:pps];
+    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
+    
 }
 - (void)getEncodedData:(NSData*)data timestamp:(uint64_t)timestamp isKeyFrame:(BOOL)isKeyFrame
 {
@@ -239,13 +274,26 @@
     //write(fd, [data bytes], [data length]);
 //    if (fileHandle != NULL)
 //    {
-//        const char bytes[] = "\x00\x00\x00\x01";
-//        size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
-//        NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+    const char bytes[] = "\x00\x00\x00\x01";
+    size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
+    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+    NSMutableData *h264Data = [[NSMutableData alloc] init];
+    [h264Data appendData:ByteHeader];
+    [h264Data appendData:data];
+    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
 //        [fileHandle writeData:ByteHeader];
 //        //[fileHandle writeData:UnitHeader];
 //        [fileHandle writeData:data];
 //    }
+}
+
+//解码回调
+- (void)gotDecodedFrame:(CVImageBufferRef)imageBuffer{
+    if (imageBuffer) {
+        //将解码数据加载到显示屏上
+        self.playLayer.pixelBuffer = imageBuffer;
+        CVPixelBufferRelease(imageBuffer);
+    }
 }
 
 #pragma makr 数据包装后的回调TYH264PackagerDelegate
@@ -474,6 +522,51 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//按比例缩放,size 是你要把图显示到 多大区域 CGSizeMake(980, 560)
+-(UIImage *) imageCompressForSize:(UIImage *)sourceImage targetSize:(CGSize)size{
+    UIImage *newImage = nil;
+    CGSize imageSize = sourceImage.size;
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat targetWidth = size.width;
+    CGFloat targetHeight = size.height;
+    CGFloat scaleFactor = 0.0;
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    CGPoint thumbnailPoint = CGPointMake(0.0, 0.0);
+    
+    if(CGSizeEqualToSize(imageSize, size) == NO){
+        CGFloat widthFactor = targetWidth / width;
+        CGFloat heightFactor = targetHeight / height;
+        if(widthFactor > heightFactor){
+            scaleFactor = widthFactor;
+        }
+        else{
+            scaleFactor = heightFactor;
+        }
+        scaledWidth = width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+        
+        if(widthFactor > heightFactor){
+            thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+        }else if(widthFactor < heightFactor){
+            thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+        }
+    }
+    UIGraphicsBeginImageContext(size);
+    CGRect thumbnailRect = CGRectZero;
+    thumbnailRect.origin = thumbnailPoint;
+    thumbnailRect.size.width = scaledWidth;
+    thumbnailRect.size.height = scaledHeight;
+    [sourceImage drawInRect:thumbnailRect];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    if(newImage == nil){
+        NSLog(@"scale image fail");
+    }
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 /*

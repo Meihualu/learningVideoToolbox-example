@@ -133,7 +133,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 - (void)initVideoToolBox {
     dispatch_sync(encodeQueue  , ^{
 //        frameNO = 0;
-        int width = 480, height = 640;
+        int width = 640, height = 480;
         // 创建编码
         OSStatus status = VTCompressionSessionCreate(NULL, width, height, kCMVideoCodecType_H264, NULL, NULL, NULL, didCompressH264, (__bridge void *)(self),  &encodingSession);
         NSLog(@"H264: VTCompressionSessionCreate %d", (int)status);
