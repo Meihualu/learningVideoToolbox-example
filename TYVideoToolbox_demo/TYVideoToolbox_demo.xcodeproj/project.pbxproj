@@ -229,6 +229,7 @@
 		A2BA88AB21995E6D00A25068 /* TYCodingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AA21995E6D00A25068 /* TYCodingViewController.m */; };
 		A2BA88AE21996FB300A25068 /* TYEncodeVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */; };
 		A2D5F56E21A291EB00D1935D /* TYAudioPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D5F56D21A291EB00D1935D /* TYAudioPlayback.m */; };
+		A2DF42B921C77FA000498BFD /* TYYUVEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DF42B821C77FA000498BFD /* TYYUVEncoding.m */; };
 		A2DF7AA121AE947B005D9BBE /* LFStreamingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DF7AA021AE947B005D9BBE /* LFStreamingBuffer.m */; };
 		A2EFC26221AD21ED00249F4B /* TYlLntegrationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */; };
 /* End PBXBuildFile section */
@@ -688,6 +689,8 @@
 		A2BA88AD21996FB300A25068 /* TYEncodeVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYEncodeVideo.m; sourceTree = "<group>"; };
 		A2D5F56C21A291EB00D1935D /* TYAudioPlayback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYAudioPlayback.h; sourceTree = "<group>"; };
 		A2D5F56D21A291EB00D1935D /* TYAudioPlayback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAudioPlayback.m; sourceTree = "<group>"; };
+		A2DF42B721C77FA000498BFD /* TYYUVEncoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYYUVEncoding.h; sourceTree = "<group>"; };
+		A2DF42B821C77FA000498BFD /* TYYUVEncoding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYYUVEncoding.m; sourceTree = "<group>"; };
 		A2DF7A9F21AE947B005D9BBE /* LFStreamingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFStreamingBuffer.h; sourceTree = "<group>"; };
 		A2DF7AA021AE947B005D9BBE /* LFStreamingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFStreamingBuffer.m; sourceTree = "<group>"; };
 		A2EFC26021AD21ED00249F4B /* TYlLntegrationCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYlLntegrationCodeViewController.h; sourceTree = "<group>"; };
@@ -1233,6 +1236,8 @@
 			children = (
 				A2EFC26021AD21ED00249F4B /* TYlLntegrationCodeViewController.h */,
 				A2EFC26121AD21ED00249F4B /* TYlLntegrationCodeViewController.m */,
+				A2DF42B721C77FA000498BFD /* TYYUVEncoding.h */,
+				A2DF42B821C77FA000498BFD /* TYYUVEncoding.m */,
 				A22C768C21B51A7500707719 /* TYH264Packager.h */,
 				A22C768D21B51A7500707719 /* TYH264Packager.m */,
 				A22C769521B51D2800707719 /* TYRtmpTypes.h */,
@@ -1555,6 +1560,7 @@
 				A22C76A121B5328200707719 /* NSString+URL.m in Sources */,
 				A24049C421BA78DE00AA541A /* GPUImageSharpenFilter.m in Sources */,
 				A240498F21BA78DE00AA541A /* GPUImageKuwaharaFilter.m in Sources */,
+				A2DF42B921C77FA000498BFD /* TYYUVEncoding.m in Sources */,
 				A240499921BA78DE00AA541A /* GPUImageLowPassFilter.m in Sources */,
 				A240494D21BA78DE00AA541A /* GPUImageAverageLuminanceThresholdFilter.m in Sources */,
 				A240496421BA78DE00AA541A /* GPUImageCrosshairGenerator.m in Sources */,

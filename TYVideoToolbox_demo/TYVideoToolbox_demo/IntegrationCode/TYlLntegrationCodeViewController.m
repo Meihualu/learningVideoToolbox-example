@@ -121,7 +121,15 @@
      */
     captureSession = [[AVCaptureSession alloc] init];
     //初始化
-    AVCaptureDevice *captureDeviceVideo = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    AVCaptureDevice *captureDeviceVideo;
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];//这个是获取两种摄像头
+    for (AVCaptureDevice *device in devices)
+    {
+        if ([device position] == AVCaptureDevicePositionFront)//获取那种摄像头
+        {
+            captureDeviceVideo = device;
+        }
+    }
     
     AVCaptureDevice *captureDeviceAudio = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     
@@ -226,8 +234,8 @@
     //直接把samplebuffer传给AVSampleBufferDisplayLayer进行预览播放
     if(connection == connectionVideo){
         [sbDisplayLayer enqueueSampleBuffer:sampleBuffer];
-        [_h264Encoder encode:sampleBuffer];
-//        [_h264Encoder encodeYuv:sampleBuffer];
+//        [_h264Encoder encode:sampleBuffer];
+        [_h264Encoder encodeVideoData:imageBuffer timeStamp:NOW];
     }
     
 }
@@ -253,7 +261,7 @@
     NSMutableData *h264Data = [[NSMutableData alloc] init];
     [h264Data appendData:ByteHeader];
     [h264Data appendData:sps];
-    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
+//    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
     
     
     //pps
@@ -261,7 +269,7 @@
     [h264Data setLength:0];
     [h264Data appendData:ByteHeader];
     [h264Data appendData:pps];
-    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
+//    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
     
 }
 - (void)getEncodedData:(NSData*)data timestamp:(uint64_t)timestamp isKeyFrame:(BOOL)isKeyFrame
@@ -280,7 +288,7 @@
     NSMutableData *h264Data = [[NSMutableData alloc] init];
     [h264Data appendData:ByteHeader];
     [h264Data appendData:data];
-    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
+//    [self.h264Decoder decodeNalu:(uint8_t *)[h264Data bytes] size:(uint32_t)h264Data.length];
 //        [fileHandle writeData:ByteHeader];
 //        //[fileHandle writeData:UnitHeader];
 //        [fileHandle writeData:data];
@@ -308,6 +316,9 @@
 - (void)videoEncoder:(id<TYVideoEncodingAgent>)encoder videoFrame:(LFVideoFrame *)frame{
     if(_uploading){
         [self pushSendBuffer:frame];
+        NSLog(@"编码后的数据有多大:%lu",(unsigned long)frame.data.length);
+        float MBCache = frame.data.length/1000/1000;
+        NSLog(@"编码后有多大:%f MB",MBCache);
     }
 }
 
@@ -419,6 +430,13 @@
     [but setTitle:@"录制" forState:UIControlStateNormal];
     [but addTarget:self action:@selector(selectorBut:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:recordingBut = but];
+    
+    UIButton *but1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    but1.frame = CGRectMake(W - 100, H - 30, 100, 30);
+    but1.backgroundColor = [UIColor greenColor];
+    [but1 setTitle:@"推流" forState: UIControlStateNormal];
+    [but1 addTarget:self action:@selector(selectorBut1) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:but1];
 }
 
 - (void)selectorBut:(UIButton *)but{
@@ -429,7 +447,7 @@
         _uploading = YES;
         [captureSession startRunning];
         [recordingBut setTitle:@"停止" forState:UIControlStateNormal];
-        [self.socket start];
+        
 //        [self pushFlow];
     }else{
         _uploading = NO;
@@ -437,6 +455,10 @@
         [recordingBut setTitle:@"录制" forState:UIControlStateNormal];
     }
     
+}
+
+- (void)selectorBut1{
+    [self.socket start];
 }
 
 - (void)pushFlow{
@@ -525,7 +547,7 @@
 }
 
 //按比例缩放,size 是你要把图显示到 多大区域 CGSizeMake(980, 560)
--(UIImage *) imageCompressForSize:(UIImage *)sourceImage targetSize:(CGSize)size{
+-(UIImage *)imageCompressForSize:(UIImage *)sourceImage targetSize:(CGSize)size{
     UIImage *newImage = nil;
     CGSize imageSize = sourceImage.size;
     CGFloat width = imageSize.width;
@@ -567,6 +589,52 @@
     }
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+- (UIImage *)imageFromSampleBuffer:(CMSampleBufferRef)sampleBuffer
+{
+    if (!sampleBuffer) {
+        return nil;
+    }
+    // Get a CMSampleBuffer's Core Video image buffer for the media data
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    // Lock the base address of the pixel buffer
+    CVPixelBufferLockBaseAddress(imageBuffer, 0);
+    
+    // Get the number of bytes per row for the pixel buffer
+    void *baseAddress = CVPixelBufferGetBaseAddress(imageBuffer);
+    
+    // Get the number of bytes per row for the pixel buffer
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+    // Get the pixel buffer width and height
+    size_t width = CVPixelBufferGetWidth(imageBuffer);
+    size_t height = CVPixelBufferGetHeight(imageBuffer);
+    
+    // Create a device-dependent RGB color space
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    // Create a bitmap graphics context with the sample buffer data
+    CGContextRef context = CGBitmapContextCreate(baseAddress, width, height, 8,
+                                                 bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    // Create a Quartz image from the pixel data in the bitmap graphics context
+    CGImageRef quartzImage = CGBitmapContextCreateImage(context);
+    
+    
+    // Unlock the pixel buffer
+    CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+    
+    // Free up the context and color space
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpace);
+    
+    // Create an image object from the Quartz image
+    //    UIImage *image = [UIImage imageWithCGImage:quartzImage];
+    UIImage *image = [UIImage imageWithCGImage:quartzImage scale:1.0f orientation:UIImageOrientationRight];
+    // Release the Quartz image
+    CGImageRelease(quartzImage);
+    
+    return image;
+    
 }
 
 /*

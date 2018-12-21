@@ -22,6 +22,7 @@
 - (void)encode:(nullable CMSampleBufferRef )sampleBuffer;
 - (void)encodeYuv:(CMSampleBufferRef )sampleBuffer;
 - (void)end;
+- (void)encodeVideoData:(CVPixelBufferRef _Nullable )pixelBuffer timeStamp:(uint64_t)timeStamp;
 @property (nonatomic, weak) NSString * _Nullable error;
 @optional
 - (void)setDelegete:(nullable id<TYVideoEncodingAgentDelegate>)delegate;
